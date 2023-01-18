@@ -28,5 +28,7 @@ def generate_configs():
         print(container_info.keys())
 
 
+generate_configs()
+
 for event in client.events(decode=True):
-    print(event.keys())
+    print(event)
