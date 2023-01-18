@@ -1,0 +1,53 @@
+name: CI
+on: [push]
+
+jobs:
+  install:
+    name: Install
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        cache: pipenv
+    - name: Install pipenv
+      run: pip install pipenv
+    - run: pipenv install
+    - name: Install dependencies, check that lockfile is synced
+      run: pipenv install --dev --deploy
+  
+  check:
+    name: Check Formatting and Types
+    runs-on: ubuntu-latest
+    needs:
+      - install
+    if: success()
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        cache: pipenv
+    - name: Install pipenv
+      run: pip install pipenv
+    - name: Install dependencies from lockfile
+      run: pipenv sync
+    - name: Run Black
+      run: pipenv run black --check portainer_nginx_gen
+      
+  docker_publish:
+    name: Publish built docker container
+    runs-on: "ubuntu-latest"
+    needs:
+      - check
+    if: success() && github.ref_name == 'main'
+    steps:
+      - uses: actions/checkout@v3
+
+      # https://github.com/marketplace/actions/push-to-ghcr
+      - name: Build and publish a Docker image for portainer_nginx_gen
+        uses: macbre/push-to-ghcr@v12
+        with:
+          image_name: uwcs/portainer_nginx_gen
+          github_token: ${{ secrets.GITHUB_TOKEN }}
