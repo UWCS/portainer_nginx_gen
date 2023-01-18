@@ -29,7 +29,7 @@ def generate_configs():
         except:
             print(f"Couldn't get info for container {container_id}")
             continue
-        print(container_info["msg"].keys())
+        print(container_info.keys())
 
 
 generate_configs()
