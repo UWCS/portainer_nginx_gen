@@ -3,6 +3,8 @@ import os
 import docker
 import requests
 
+from pprint import pprint as print
+
 API_KEY = os.environ.get("PORTAINER_API_KEY")
 PORTAINER_API_URL = (
     "https://portainer.uwcs.co.uk/api/endpoints/4/docker/containers/{}/json"
@@ -27,7 +29,7 @@ def generate_configs():
         except:
             print(f"Couldn't get info for container {container_id}")
             continue
-        print(container_info.keys())
+        print(container_info["msg"].keys())
 
 
 generate_configs()
