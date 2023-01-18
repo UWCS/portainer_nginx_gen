@@ -1,5 +1,4 @@
 import os
-from pprint import pprint as pp
 
 import docker
 import requests
@@ -16,14 +15,18 @@ client = docker.DockerClient(
     base_url=os.environ.get("DOCKER_HOST", "unix://var/run/docker.sock")
 )
 
-for container in client.containers.list():
-    container_id = container.id
-    data = session.get(PORTAINER_API_URL.format(container_id))
-    container_info = data.json()
-    pp(container_info)
+
+def generate_configs():
+    for container in client.containers.list():
+        container_id = container.id
+        data = session.get(PORTAINER_API_URL.format(container_id))
+        try:
+            container_info: dict = data.json()
+        except:
+            print(f"Couldn't get info for container {container_id}")
+            continue
+        print(container_info.keys())
 
 
 for event in client.events(decode=True):
-    print("*" * 40)
-    pp(event)
-    print("*" * 40)
+    print(event.keys())
