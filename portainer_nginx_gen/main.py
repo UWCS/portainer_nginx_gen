@@ -21,15 +21,14 @@ client = docker.DockerClient(
 def generate_configs():
     for container in client.containers.list():
         container_id = container.id
-        print(container_id)
         data = session.get(PORTAINER_API_URL.format(container_id))
-        print(data)
         try:
             container_info: dict = data.json()
         except:
             print(f"Couldn't get info for container {container_id}")
             continue
-        print(container_info.keys())
+        portainer_info = container_info["Portainer"]
+        print(portainer_info)
 
 
 generate_configs()

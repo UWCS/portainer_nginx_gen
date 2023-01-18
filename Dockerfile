@@ -15,4 +15,4 @@ RUN chmod +x /app/docker-entrypoint.sh
 RUN chmod +x /app/nginx_reloader.sh
 
 ENTRYPOINT ["/app/docker-entrypoint.sh"]
-CMD ["pipenv", "run", "python", "main.py"]
+CMD ["pipenv", "run", "python", "-u", "main.py"]
