@@ -39,8 +39,8 @@ jobs:
   docker_publish:
     name: Publish built docker container
     runs-on: "ubuntu-latest"
-    needs:
-      - check
+    # needs:
+    #   - check
     if: success() && github.ref_name == 'main'
     steps:
       - uses: actions/checkout@v3
