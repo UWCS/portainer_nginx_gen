@@ -19,7 +19,8 @@ client = docker.DockerClient(
 for container in client.containers.list():
     container_id = container.id
     data = session.get(PORTAINER_API_URL.format(container_id))
-    print(data.text())
+    container_info = data.json()
+    pp(container_info)
 
 
 for event in client.events(decode=True):
