@@ -35,4 +35,4 @@ def generate_configs():
 generate_configs()
 
 for event in client.events(decode=True):
-    print(event)
+    print(event.keys())
